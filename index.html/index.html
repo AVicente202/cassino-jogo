@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo de Cassino - Acerto e Erro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: 0 auto;
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+    }
+    input {
+      width: 80%;
+    }
+    button {
+      background: #28a745;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎰 Jogo de Cassino</h1>
+    <p>Saldo: R$<span id="saldo">100</span></p>
+    <input type="number" id="aposta" placeholder="Valor da aposta">
+    <input type="number" id="palpite" placeholder="Número de 1 a 10">
+    <button onclick="jogar()">Jogar</button>
+    <p id="mensagem"></p>
+  </div>
+
+  <script>
+    let saldo = 100;
+
+    function jogar() {
+      const aposta = parseInt(document.getElementById("aposta").value);
+      const palpite = parseInt(document.getElementById("palpite").value);
+      const mensagem = document.getElementById("mensagem");
+      const saldoEl = document.getElementById("saldo");
+
+      if (isNaN(aposta) || isNaN(palpite)) {
+        mensagem.textContent = "Preencha todos os campos!";
+        return;
+      }
+
+      if (aposta <= 0 || aposta > saldo) {
+        mensagem.textContent = "Aposta inválida!";
+        return;
+      }
+
+      if (palpite < 1 || palpite > 10) {
+        mensagem.textContent = "Palpite deve ser entre 1 e 10!";
+        return;
+      }
+
+      const numero = Math.floor(Math.random() * 10) + 1;
+
+      if (palpite === numero) {
+        const ganho = aposta * 2;
+        saldo += ganho;
+        mensagem.textContent = `🎉 Acertou! O número era ${numero}. Você ganhou R$${ganho}.`;
+      } else {
+        saldo -= aposta;
+        mensagem.textContent = `❌ Errou! O número era ${numero}. Você perdeu R$${aposta}.`;
+      }
+
+      saldoEl.textContent = saldo;
+
+      if (saldo <= 0) {
+        mensagem.textContent += " Fim de jogo. Você ficou sem saldo!";
+        document.querySelector("button").disabled = true;
+      }
+    }
+  </script>
+</body>
+</html>
